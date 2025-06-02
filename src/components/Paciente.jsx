@@ -2,7 +2,7 @@ import React,{useState,useEffect} from "react";
 import { Row, Col, Image, Button, Card } from 'react-bootstrap';
 import * as FaIcons from 'react-icons/fa';
 import BarChart from "./graphics";
-import './paciente.css'
+import '../styles/paciente.css'
 import {useParams,useNavigate,Link} from 'react-router-dom';
 import axios from 'axios';
 import ModalP from './Modales'

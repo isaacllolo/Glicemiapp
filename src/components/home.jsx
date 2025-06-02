@@ -3,10 +3,11 @@ import { Button, Card, Image, Modal } from 'react-bootstrap';
 import * as FaIcons from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import{headersData} from './configs'
 import SetType from './set_tipo';
 import ModalP from './Modales'
 import Editar from './P_edit'
+import {EliminarPaciente} from '../api/glicemiappService'
+
 //recibir props y retornar una vista
 const PData = ({paciente,moverse,editar,eliminar}) => {
     const [show, setShow] = useState(false);
@@ -29,7 +30,7 @@ const PData = ({paciente,moverse,editar,eliminar}) => {
 const ModalEliminar = ({show,setShow,changeData}) => {
     const eliminar = async () => {
         try{
-            const {data} = await axios.delete(`${import.meta.env.VITE_APP_URI}/Pacientes/${show.cedula}`,headersData);
+            const {data} = await EliminarPaciente(show.cedula);
             changeData(show);
             setShow();
         
@@ -67,7 +68,7 @@ const Home = () => {
         } 
         const envio = async () => {
             try{
-                const {data} = await axios.get(`${import.meta.env.VITE_APP_URI}/GetPacientes`,headersData);
+
                 setData(data.usuarios);
                 setTipo(data.tipo);
             } 

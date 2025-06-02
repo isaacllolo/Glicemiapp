@@ -1,10 +1,8 @@
 import React, {useState}   from "react";
 import { Button, Form, Card,Row, Alert } from 'react-bootstrap'; 
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import{headersData} from './configs'
-
+import {LoginService} from '../api/glicemiappService';
 
 
 const Login = () => {
@@ -25,12 +23,18 @@ const Login = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         try {
-            const a = await axios.post(`${import.meta.env.VITE_APP_URI}/login`, {"email":email,"password":password},headersData);
-            if(a.data.status === 'success'){
+            const response = await LoginService.login( email, password );
+            if (response.status === 200) {
+                // Guardar el token en el localStorage o en un contexto global
+                localStorage.setItem('token', response.data.token);
                 history('/');
-        }} catch (error) {
-            setError(error.response.data);
-            
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                setError('Credenciales incorrectas');
+            } else {
+                setError('Error al iniciar sesión, intente nuevamente');
+            }
         }
     }
 

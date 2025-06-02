@@ -2,15 +2,14 @@ import React, {useState,useEffect} from "react";
 import {Link,useParams,useNavigate} from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import {Modal, Button} from 'react-bootstrap';
-import {headersData} from "./configs";
-import axios from 'axios';
+import { ObtenerMedicamentos,EliminarMedicamento , ActualizarCheck} from "../api/glicemiappService";
 import moment from 'moment';
 
 const ModalEliminar = ({show: medicamento,setShow,eliminar}) => {
     const handleClose = () => setShow();
     const eliminarMedicamento=async()=>{
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_APP_URI}/medicamentos/${medicamento.id}`,headersData);
+            const response = EliminarMedicamento(medicamento.id)
             eliminar(medicamento.id);
             handleClose();
         } catch (error) {
@@ -38,10 +37,10 @@ const ModalEliminar = ({show: medicamento,setShow,eliminar}) => {
     const [medicamentos,setMedicamentos]=useState([])
     const [eliminar,setEliminar]=useState()
     const setUso=(id,hora,check)=>{
-        axios.put(`${import.meta.env.VITE_APP_URI}/actualizarCheks`,{hora,id,check},headersData)
+        ActualizarCheck(id,hora,check); 
     }
     const obtener_medicamentos=async()=>{
-        const res=await axios.get(`${import.meta.env.VITE_APP_URI}/paciente/medicamento/${cedula}`,headersData);
+        const res= ObtenerMedicamentos(cedula);
         setMedicamentos(res.data);}
     useEffect(()=>{
         obtener_medicamentos();

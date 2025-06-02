@@ -1,17 +1,7 @@
 import React , {useState}  from "react";
 import { Button, Form, Card, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
-
-
-const headersData = {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
-    },
-    withCredentials: true,
-  }
+import { Registro } from "../api/glicemiappService";
 
 const Reg = () => {
     const history = useNavigate();
@@ -54,7 +44,7 @@ const Reg = () => {
                 return;
             }
             try {
-                    await axios.post(`${import.meta.env.VITE_APP_URI}/register`, user, headersData);
+                    Registro(user);
                     history('/');
                 }
             catch (error) {

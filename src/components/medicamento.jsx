@@ -1,12 +1,11 @@
 import React, {useState} from "react";
 import { Button, Form, Card,Row,Col } from 'react-bootstrap'; 
-import {useParams,useNavigate, json} from 'react-router-dom';
+import {useParams,useNavigate} from 'react-router-dom';
 import {List,ListItem,ListItemText,Divider,IconButton,Card as MCard} from '@mui/material'
-import {Delete as DeleteIcon,Add as AddIcon} from '@mui/icons-material/';
+import {Delete as DeleteIcon,Add as AddIcon} from '@mui/icons-material';
 import moment from 'moment';
-import axios from "axios";
 import VerMedicamento from "./mostrarMedicamentos";
-import {headersData} from "./configs.jsx"
+import { AgregarMedicamento,ActualizarMedicamento } from "../api/glicemiappService";
 import Modal from "./modales";
 
 
@@ -24,7 +23,7 @@ const Medicamento = () => {
     }
     const handleSubmit = async(e) => {
         e.preventDefault();
-        await axios.post(`${import.meta.env.VITE_APP_URI}/medicamento/${cedula}`,{...datos, hora:Array.from(new Set(horarios))},headersData)
+        ActualizarMedicamento(cedula,datos)
         history(`/paciente/${cedula}`)
     }
 
@@ -133,7 +132,7 @@ const CambiarMedicamento = ({medicamento,actualizar}) => {
         if(cambios.dosis!==datos.dosis){
             envio={...envio,dosis:datos.dosis}
         }
-        const {data:respuesta}=await axios.put(`${import.meta.env.VITE_APP_URI}/medicamento/${cedula}/${id}`,{datos:envio  , horariosEliminados,horariosNuevos:Array.from(new Set(horariosNuevos))},headersData)
+        const {data:respuesta}=
         actualizar(respuesta)
     }
 

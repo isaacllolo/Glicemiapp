@@ -12,7 +12,7 @@ import P_reg from './components/P_reg';
 import RecuperarContraseña from './components/recuperarContraseña';
 import RestablecerContraseña from './components/restablecerContraseña';
 import Reg from './components/Reg';
-import './components/App.scss';
+import './styles/App.scss';
 import NavBar from './components/Navbar';
 import Retype from './components/Retype'
 import swDEV from './swDEV';

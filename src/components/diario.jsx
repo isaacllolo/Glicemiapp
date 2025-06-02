@@ -1,10 +1,9 @@
 import React, {useState,useEffect} from "react";
 import { Row, Col, Image, Button, Form, FormControl, InputGroup, Card } from 'react-bootstrap';
 import BarChart from "./graphics";
-import './diario.css'
-import axios from 'axios';
+import '../styles/diario.css';
 import { useParams, useNavigate } from 'react-router-dom';
-import { headersData } from './configs'
+import { ObtenerDiario , ObtenerPaciente ,GuardarDiario } from "../api/glicemiappService";
 import moment from "moment";
 import * as XLSX from 'xlsx/xlsx.mjs';
 const PData = (props) => {
@@ -24,7 +23,7 @@ const Seguiminto = ({actualizar}) => {
     
     const {cedula}=useParams();
     const obtener_datos = async() => { 
-        const datos = await axios.get(`${import.meta.env.VITE_APP_URI}/GetDiario/${cedula}`,headersData);
+        const datos = await ObtenerDiario(cedula);
         setDatos(datos.data)
     }
     useEffect(() => {
@@ -78,8 +77,17 @@ const Diario = () => {
     const [actualizar,setActualizar]=useState({})
     let {cedula}=useParams();
     const obtener_paciente = async() => {
-        const res = await axios.get(`${import.meta.env.VITE_APP_URI}/paciente/${cedula}`,headersData); 
-        setPaciente({...res.data});
+        const res = await ObtenerPaciente(cedula);
+        if(res.data===null){
+            history('/pacientes');
+        }
+        setPaciente({...res.data}); 
+        userdatos({
+            glucosa: "",
+            Insulina: "",
+            fecha: new Date(),
+            hora: new Date().toLocaleTimeString()
+        });
         
     }
     useEffect(() => {
@@ -102,7 +110,7 @@ const Diario = () => {
     const handleSubmit = async (e) => {
 
         e.preventDefault();
-       const {data}= await axios.post(`${import.meta.env.VITE_APP_URI}/diario`, {"cedula":cedula,datos:datos},headersData)  
+       const {data}= ObtenerDiario(cedula,datos)
          setActualizar(data)
     }
     
