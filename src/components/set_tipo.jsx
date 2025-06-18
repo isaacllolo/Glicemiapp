@@ -1,14 +1,13 @@
 import React from "react";
 import { Row, Col, Image, Button, Card,Modal} from 'react-bootstrap';
-import axios from 'axios';
 import {useNavigate}  from 'react-router-dom';
-import {headersData} from './configs'
+import { CambiarTipo } from "../api/glicemiappService";
 
 const Set_tipo = () => {
     const history = useNavigate();
     const cambiar_tipo = async(tipo) => {
-        await axios.put(`${import.meta.env.VITE_APP_URI}/userType`, {tipo} ,headersData)
-        localStorage.setItem('tipo', tipo);
+        await CambiarTipo(tipo);
+        localStorage.setItem('tipo',tipo);
         window.location.reload();  
     }
     return (
@@ -54,7 +53,7 @@ const Set_tipo = () => {
                             </li>
                         </ul>
                     </Card.Text>
-                   <Button onClick={()=>{cambiar_tipo(2)}} > Seleccionar</Button>
+                   <Button onClick={()=>{cambiar_tipo('multi')}} > Seleccionar</Button>
                 </Card.Body>
             </Card>
         </div>

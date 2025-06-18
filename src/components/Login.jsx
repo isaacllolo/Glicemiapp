@@ -23,10 +23,14 @@ const Login = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         try {
-            const response = await LoginService.login( email, password );
+            const response = await LoginService( email, password );
             if (response.status === 200) {
                 // Guardar el token en el localStorage o en un contexto global
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('accessToken', response.data.access);
+                localStorage.setItem('refreshToken', response.data.refresh);
+                localStorage.setItem('usuario_cedula', JSON.stringify(response.data.usuario.cedula));
+                localStorage.setItem('tipo',JSON.parse(JSON.stringify(response.data.usuario.tipo)));
+
                 history('/');
             }
         } catch (error) {

@@ -2,8 +2,7 @@ import React,{useState} from 'react';
 import UploadImage from "./UploadImage";
 import { useNavigate } from 'react-router-dom';
 import { Row, Col, Image as Imagen, Button, Form, Alert } from 'react-bootstrap';
-import axios from 'axios';
-import {headersData} from './configs';
+import { EditarPaciente } from '../api/glicemiappService';
 
 const P_edit = ({userdata,changeData}) => {
     const history = useNavigate();
@@ -19,8 +18,8 @@ const P_edit = ({userdata,changeData}) => {
     const handleSubmit = async(e) => {
         let data = datos;
         e.preventDefault();
-        const { nombre, apellido, telefono, cedula, edad, eps} = datos;
-        if (!eps || !nombre || !apellido || !telefono || !cedula || !edad) {
+        const { nombre, telefono, cedula, edad, eps} = datos;
+        if (!eps || !nombre|| !telefono || !cedula || !edad) {
             setError("Todos los campos son obligatorios");
             return;
         }
@@ -32,10 +31,7 @@ const P_edit = ({userdata,changeData}) => {
             setError("El nombre no es válido");
             return;
         }
-        if (!RegExp(/^[a-zA-Z ]+$/).test(apellido)) {
-            setError("Los apellidos no son válidos");
-            return;
-        }
+
         if (!RegExp(/^[0-9]{10}$/).test(cedula)) {
             setError("La cedula no es válida");
             return;
@@ -49,7 +45,9 @@ const P_edit = ({userdata,changeData}) => {
         }
         Object.keys(datos).forEach((key) => (data[key] == null || data[key] == ''|| data[key] == userdata[key]) && delete data[key]);
         try {
-        const {data:pacienteEdit }= await axios.put(`${import.meta.env.VITE_APP_URI}/Pacientes/${userdata.cedula}`,{...data}, headersData);
+
+            console.log(paciente);
+        const {data:pacienteEdit }= EditarPaciente(cedula,{...data});
         changeData(pacienteEdit.paciente,userdata.cedula);
         } catch (error) {
             setError(error.response.data.message);
@@ -59,7 +57,7 @@ const P_edit = ({userdata,changeData}) => {
                 <Form onSubmit={handleSubmit}>
                     <Row>
                         <Col className="text-center">
-                            <Imagen className="my-1 tamañoImg" src={image? image:`${import.meta.env.VITE_APP_URI}/public/${datos.foto}`}  roundedCircle/>
+                            <Imagen className="my-1 tamañoImg" src={image? image : datos.foto}  roundedCircle/>
                             <UploadImage image={setImage}/>
                             
                         </Col>
@@ -68,10 +66,7 @@ const P_edit = ({userdata,changeData}) => {
                         <Form.Label>Nombre</Form.Label>
                         <Form.Control type="text" placeholder="Nombre" name="nombre" value={datos.nombre}  onChange={handleChange}/>
                     </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Apellidos</Form.Label>
-                        <Form.Control type="text" placeholder="Apellidos" name="apellido" value={datos.apellido}   onChange={handleChange}/>
-                    </Form.Group>
+
                     <Form.Group className="mb-3">
                         <Form.Label>Teléfono</Form.Label>
                         <Form.Control type="text" placeholder="Teléfono" name="telefono" value={datos.telefono}   onChange={handleChange}/>

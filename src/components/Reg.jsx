@@ -14,8 +14,8 @@ const Reg = () => {
         const  handleSubmit = async (e) => { 
             const emailregex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             e.preventDefault();
-            const { name, apellidos, telefono, email, password, confPassword:password2 } = user;
-            if(!email || !name || !apellidos || !telefono || !password){
+            const { nombre_completo, telefono, email, password, confPassword:password2 } = user;
+            if(!email || !nombre_completo || !telefono || !password){
                 setError("Todos los campos son obligatorios");
                 return;
             }
@@ -31,21 +31,18 @@ const Reg = () => {
                 setError("El teléfono no es válido");
                 return;
             }
-            if(!RegExp(/^[a-zA-Z ]+$/).test(name)){
+            if(!RegExp(/^[a-zA-Z ]+$/).test(nombre_completo)){
                 setError("El nombre no es válido");
                 return;
             }
-            if(!RegExp(/^[a-zA-Z ]+$/).test(apellidos)){
-                setError("Los apellidos no son válidos");
-                return;
-            }
+   
             if(password !== password2){
                 setError("Las contraseñas no coinciden");
                 return;
             }
             try {
                     Registro(user);
-                    history('/');
+                    history('/login');
                 }
             catch (error) {
                 setError(error.response.data);
@@ -61,11 +58,7 @@ const Reg = () => {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
                         <Form.Label>Nombre</Form.Label>
-                        <Form.Control type="text" name="name" placeholder="Nombre" onChange={handleChange} />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Apellidos</Form.Label>
-                        <Form.Control type="text" name="apellidos" placeholder="Apellidos" onChange={handleChange} />
+                        <Form.Control type="text" name="nombre_completo" placeholder="Nombre" onChange={handleChange} />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Teléfono</Form.Label>

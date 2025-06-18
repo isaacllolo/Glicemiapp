@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {useNavigate} from 'react-router-dom'
 
-const SidebarItem= styled(Link)`
+const SidebarItem = styled(Link)`
   display: flex;
   color: #FE2472;
   align-items: center;
@@ -13,9 +12,9 @@ const SidebarItem= styled(Link)`
   text-decoration: none;
   font-size: 18px;
   &:hover {
-    i{ color:#FFFFFF;}
+    i{ color:#FFFFFF; }
     color:#FFFFFF;
-    background:  #FE2472;
+    background: #FE2472;
     border-left: 4px solid #632ce4;
     cursor: pointer;
   }
@@ -42,29 +41,29 @@ const DropdownLink = styled(Link)`
 
 const SubMenu = ({ item }) => {
   const navigate = useNavigate();
-  const showSubnav = () => setSubnav(!subnav);
+  const [subnav, setSubnav] = useState(false);
+
+  const handleClick = async () => {
+    if (item.foo) {
+      await item.foo();
+    }
+    navigate(item.path);
+  };
 
   return (
-    <>
-      <p onClick={async()=>{
-        if (item.foo){
-          await item.foo();
-        }
-        navigate(item.path);
-      }}>
-        <SidebarItem>
-          {item.icon}
-          <SidebarLabel>{item.title}</SidebarLabel>
-        </SidebarItem>
-        <div>
-          {item.subNav && subnav
-            ? item.iconOpened
-            : item.subNav
-            ? item.iconClosed
-            : null}
-        </div>
-      </p>
-    </>
+    <div onClick={handleClick} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+      <SidebarItem as="div">
+        {item.icon}
+        <SidebarLabel>{item.title}</SidebarLabel>
+      </SidebarItem>
+      <div>
+        {item.subNav && subnav
+          ? item.iconOpened
+          : item.subNav
+          ? item.iconClosed
+          : null}
+      </div>
+    </div>
   );
 };
 

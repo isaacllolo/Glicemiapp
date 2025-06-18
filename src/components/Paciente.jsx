@@ -4,10 +4,9 @@ import * as FaIcons from 'react-icons/fa';
 import BarChart from "./graphics";
 import '../styles/paciente.css'
 import {useParams,useNavigate,Link} from 'react-router-dom';
-import axios from 'axios';
 import ModalP from './Modales'
 import Editar from './P_edit'
-import {headersData} from './configs'
+import { ObtenerPaciente } from "../api/glicemiappService";
 const Dosis = (props) => {    
       
     const handleClick = async(e) => {
@@ -35,12 +34,14 @@ const Paciente = () => {
     const mes = fecha.getMonth() + 1;
     const año = fecha.getFullYear();
     const fechaActual = año + "-" + mes + "-" + dia;
-    const obtener_paciente = async() => {
-        const res = await axios.get(`${import.meta.env.VITE_APP_URI}/paciente/${cedula}`,headersData );
-        setPaciente({...res.data}); 
-    }
+
     useEffect(() => {
-        obtener_paciente();
+        const fetchPaciente = async () => {
+            const data = await ObtenerPaciente(cedula);
+            console.log(data);
+            setPaciente(data);
+        };
+        fetchPaciente();
     }, []);
 
 
@@ -58,7 +59,17 @@ const Paciente = () => {
                 <Card.Header>
                     <Row>
                             <Col className="text-center">
-                                <Image className="my-1" src={paciente.foto===""?"userIcon.png":import.meta.env.VITE_APP_URI+"/public/"+paciente.foto} roundedCircle/>
+                                    {
+                                    !paciente.foto || paciente.foto === null 
+                                        ? <FaIcons.FaUserCircle className="text-secondary" size={70} />
+                                        : <Image
+                                            className="my-1"
+                                            src={ paciente.foto }
+                                            width={70}
+                                            height={70}
+                                            roundedCircle
+                                        />
+                                    }
                                 <div className="d-block text-center">
                                     <div>
                                         <h2 className="d-inline">{paciente.nombre}</h2>
@@ -96,11 +107,6 @@ const Paciente = () => {
                                     <Button className="my-auto" onClick={()=>{
                                         history(`/medicamento/${cedula}`)
                                     }}>Agregar medicamento</Button>
-                                </li> 
-                            </ul>
-                            <ul className="dosis list-unstyled">
-                                <li>
-                                    <Button className="my-auto"><a className="rec-color" href="https://calendar.google.com/calendar/u/0/r/eventedit" target="_blank">Agregar recordatorio</a></Button>
                                 </li> 
                             </ul>
                         </div>

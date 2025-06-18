@@ -6,16 +6,35 @@ import axios from 'axios';
 import SetType from './set_tipo';
 import ModalP from './Modales'
 import Editar from './P_edit'
-import {EliminarPaciente} from '../api/glicemiappService'
+import {EliminarPaciente ,ObtenerPacientes} from '../api/glicemiappService'
 
 //recibir props y retornar una vista
 const PData = ({paciente,moverse,editar,eliminar}) => {
     const [show, setShow] = useState(false);
     return (
         <tr class="unread">
-            {paciente.imagen === ''?<td onClick={()=>{moverse(paciente.cedula)}}><FaIcons.FaUserCircle className=' fa-5x text-black' /></td>:<td><Image src={import.meta.env.VITE_APP_URI+"/public/"+paciente.foto} className='img-fluid' roundedCircle /></td>}
+            {
+  !paciente.foto || paciente.foto === '' ? (
+    <td onClick={() => moverse(paciente.cedula)}>
+      <FaIcons.FaUserCircle size={70} className='fa-5x text-black' />
+    </td>
+  ) : (
+    <td onClick={() => moverse(paciente.cedula)}>
+      <Image
+        src={
+          paciente.foto
+        }
+        width={70}
+        height={70}
+        className='img-fluid'
+        roundedCircle
+      />
+    </td>
+  )
+}
+
             <td className="text-center align-middle" onClick={()=>{moverse(paciente.cedula)}}>
-                <h6 class="mb-1">{paciente.nombre +" "+ paciente.apellido}</h6>
+                <h6 class="mb-1">{paciente.nombre}</h6>
                 <p class="m-0">{`${paciente.cedula}`}</p>
             </td>
             <td className="text-center align-middle">
@@ -58,7 +77,7 @@ const ModalEliminar = ({show,setShow,changeData}) => {
 
 const Home = () => {
         const [data, setData] = useState([]);
-        const [tipo, setTipo] = useState(-1);
+        const [tipo, setTipo] = useState("default");
         const [show,setShow] = useState(false);
         const [editar,setEditar] = useState({});
         const [eliminar,setEliminar] = useState();
@@ -67,15 +86,16 @@ const Home = () => {
             history(`/paciente/${paciente}`);
         } 
         const envio = async () => {
-            try{
+        
+        const token = localStorage.getItem('accessToken');
+        setTipo(localStorage.getItem('tipo'));
+       console.log(data);
+        setData(await ObtenerPacientes());
 
-                setData(data.usuarios);
-                setTipo(data.tipo);
-            } 
-            catch (error) {
-                history('/login');
-            }
-            
+
+        if (!token) {
+        navigate('/login');
+        } 
             
         }
         useEffect(() => {
@@ -83,10 +103,10 @@ const Home = () => {
         }, []);
 
       
-            if (tipo === 0) {
+            if (tipo === "default") {
                 return (<SetType />)
             }
-            else if(tipo ===1){
+            else if(tipo ==='unico'){
                 if(data.length !== 0){
                     moverse(data[0].cedula);
                 }

@@ -3,8 +3,6 @@ import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
 import * as RiIcons from 'react-icons/ri';
-import axios from 'axios';
-import {headersData} from './configs'
 const iftipo = () => {
   const tipo2=[{
     title: 'Pacientes',
@@ -29,8 +27,10 @@ const iftipo = () => {
     path: '/login',
     icon: <FaIcons.FaDoorClosed  className=' fa-6x ' />,
     foo: async()=>{
-      await axios.get(`${import.meta.env.VITE_APP_URI}/logout`,headersData);
-    }
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('usuario');
+    },
   }];
   const tipo1=[{
     title: 'Paciente',
@@ -45,7 +45,9 @@ const iftipo = () => {
     title: 'Cerrar sesion',
     path: '/login',
     foo: async()=>{
-      await axios.get(`${import.meta.env.VITE_APP_URI}/logout`,headersData);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('usuario');
     },
     icon: <FaIcons.FaDoorClosed className=' fa-6x ' />
   }];
@@ -53,13 +55,15 @@ const iftipo = () => {
     title: 'Cerrar sesion',
     path: '/login',
     foo: async()=>{
-      await axios.get(`${import.meta.env.VITE_APP_URI}/logout`,headersData);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('usuario');
     },
     icon: <FaIcons.FaDoorClosed className=' fa-6x ' />
   }];
   
- if(localStorage.getItem('tipo')== 1)return(tipo1)
- if(localStorage.getItem('tipo')== 2)return(tipo2)
+ if(localStorage.getItem('tipo')== 'unico')return(tipo1)
+ if(localStorage.getItem('tipo')== 'multi')return(tipo2)
  else return(tipo0)
 
 

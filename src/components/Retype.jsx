@@ -2,8 +2,7 @@ import React,{useState,useEffect}from 'react';
 import UploadImage from "./UploadImage";
 import { Row, Col, Image as Imagen, Button, Form, Card } from 'react-bootstrap';
 import { useNavigate} from 'react-router-dom';
-import axios from 'axios';
-import {headersData} from "./configs"
+import { CambiarTipo,RegistrarPaciente} from '../api/glicemiappService';
 //cambiar las dimensiones de la imagen en base64 a 100x100 y regresarla como base 64
 
 const P_reg = () => {
@@ -13,8 +12,10 @@ const P_reg = () => {
     const [user, setUser] = useState({});
 
     const getdata = async () => {
-        const response = await axios.post(`${import.meta.env.VITE_APP_URI}`,{email:localStorage.getItem('correo')});
-        setUser(response.data);
+       const usuarioString= localStorage.getItem('usuario');
+       const usuario = JSON.parse(usuarioString);
+       console.log(usuario);
+        setUser(usuario);
     }
 
     
@@ -33,11 +34,14 @@ const P_reg = () => {
     }
     const handleSubmit = async(e) => {
         e.preventDefault();
-        await axios.put(`${import.meta.env.VITE_APP_URI}/userType`, {"tipo":1},headersData); 
-        localStorage.setItem('tipo', 1);
-        await axios.post(`${import.meta.env.VITE_APP_URI}/registerPacientes`,
-         {"imagen":image,"datosP":{...datos,nombre:user.Nombre,telefono:user.Telefono}}
-         ,headersData);
+         await CambiarTipo('unico');
+        localStorage.setItem('tipo', 'unico');
+
+        await RegistrarPaciente({
+            ...datos,
+            nombre: user.nombre_completo,
+            telefono: user.telefono,
+        });
         history('/');
     }
     return(
@@ -55,7 +59,7 @@ const P_reg = () => {
                     </Row>
                     <Form.Group className="mb-3">
                         <Form.Label>Cédula</Form.Label>
-                        <Form.Control type="text" placeholder="Cédula" name="cédula" onChange={handleChange}/>
+                        <Form.Control type="text" placeholder="Cédula" name="cedula" onChange={handleChange}/>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Edad</Form.Label>

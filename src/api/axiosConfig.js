@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
             if (refreshToken) {
                 try {
                     //const refreshResponse = await axios.post('/token/refresh/', { refresh: refreshToken }); // Ajusta la URL del endpoint de refresco
-                    const refreshResponse = await axios.post(baseURL + 'login_app/token/refresh/', { refresh: refreshToken });
+                    const refreshResponse = await axios.post(baseURL +'/usuarios/token/refresh/', { refresh: refreshToken });
 
                     if (refreshResponse.status === 200) {
                         console.log('Token de acceso renovado:', refreshResponse.data.access);
