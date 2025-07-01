@@ -86,21 +86,15 @@ const Home = () => {
             history(`/paciente/${paciente}`);
         } 
         const envio = async () => {
-        
-        const token = localStorage.getItem('accessToken');
         setTipo(localStorage.getItem('tipo'));
        console.log(data);
         setData(await ObtenerPacientes());
 
 
-     
+      
             
         }
         useEffect(() => {
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-        history('/login');
-        }
             envio();
         }, []);
 
