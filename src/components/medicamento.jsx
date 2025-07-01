@@ -6,7 +6,7 @@ import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import moment from 'moment';
 import VerMedicamento from "./mostrarMedicamentos"; // Asegúrate de que esta ruta sea correcta
 import { AgregarMedicamento, ActualizarMedicamento, EliminarAplicacionMedicamento } from "../api/glicemiappService"; // Asegúrate de que EliminarAplicacionMedicamento exista en tu servicio si lo necesitas
-import Modal from "./modales"; // Asegúrate de que esta ruta sea correcta
+import Modal from "./Modales"; // Asegúrate de que esta ruta sea correcta
 
 // --- Componente para AGREGAR un nuevo medicamento ---
 const Medicamento = ({ onCloseModal }) => { // Recibe una función para cerrar el modal
