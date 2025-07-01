@@ -93,12 +93,14 @@ const Home = () => {
         setData(await ObtenerPacientes());
 
 
-        if (!token) {
-        navigate('/login');
-        } 
+     
             
         }
         useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+        history('/login');
+        }
             envio();
         }, []);
 
