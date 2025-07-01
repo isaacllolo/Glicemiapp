@@ -43,15 +43,18 @@ const P_edit = ({userdata,changeData}) => {
         if (image !== '') {
             data.foto = image;
         }
-        Object.keys(datos).forEach((key) => (data[key] == null || data[key] == ''|| data[key] == userdata[key]) && delete data[key]);
-        try {
-
-            console.log(paciente);
-        const {data:pacienteEdit }= EditarPaciente(cedula,{...data});
-        changeData(pacienteEdit.paciente,userdata.cedula);
-        } catch (error) {
-            setError(error.response.data.message);
-        }
+Object.keys(datos).forEach((key) => {
+    if ((data[key] == null || data[key] === '') && key !== 'cedula') {
+        delete data[key];
+    }
+});
+ try {
+    const pacienteEdit = await EditarPaciente(cedula, { ...data }); // <- aquí
+    changeData(pacienteEdit, userdata.cedula); // <- y aquí
+    setShow(false); // si aplica
+  } catch (error) {
+    setError(error.response?.data?.message || "Error al editar");
+  }
     }
     return(
                 <Form onSubmit={handleSubmit}>
