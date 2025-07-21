@@ -21,7 +21,6 @@ Este repositorio contiene el **frontend** del proyecto, desarrollado con **React
 - 📊 Recharts
 - 🔐 JWT para autenticación (con backend en Django)
 - 📦 Axios para consumo de API
-- 🧠 Zustand (o Context API, si aplica) para manejo de estado global
 
 ---
 
