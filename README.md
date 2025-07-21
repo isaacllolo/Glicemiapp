@@ -49,5 +49,5 @@ VITE_API_URL=http://localhost:8000/api
 Desarrollado por Isaac como parte de su portafolio fullstack.
 
 📄 Licencia
-MIT — libre para usar, modificar o compartir.
-Si te fue útil, dale una ⭐ en GitHub 😊
+[![Licencia: CC BY-NC 4.0](https://licensebuttons.net/l/by-nc/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc/4.0/)
+
