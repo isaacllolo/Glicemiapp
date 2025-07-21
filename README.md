@@ -48,6 +48,5 @@ VITE_API_URL=http://localhost:8000/api
 🧑‍💻 Autor
 Desarrollado por Isaac como parte de su portafolio fullstack.
 
-📄 Licencia
 [![Licencia: CC BY-NC 4.0](https://licensebuttons.net/l/by-nc/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc/4.0/)
 
