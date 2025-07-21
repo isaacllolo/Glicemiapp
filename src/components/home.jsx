@@ -87,10 +87,10 @@ const Home = () => {
         } 
         const envio = async () => {
         setTipo(localStorage.getItem('tipo'));
-       console.log(data);
-        setData(await ObtenerPacientes());
-
-
+            const res = await ObtenerPacientes();
+            const pacientes = Array.isArray(res) ? res : [res];
+            console.log(pacientes);
+            setData(pacientes);
       
             
         }
@@ -103,9 +103,11 @@ const Home = () => {
                 return (<SetType />)
             }
             else if(tipo ==='unico'){
-                if(data.length !== 0){
-                    moverse(data[0].cedula);
-                }
+                console.log(data);
+            if (Array.isArray(data) && data.length > 0) {
+                moverse(data[0].cedula);
+            }
+
             }
          
         

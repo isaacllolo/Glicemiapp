@@ -30,7 +30,7 @@ const Login = () => {
                 localStorage.setItem('refreshToken', response.data.refresh);
                 localStorage.setItem('usuario_cedula', JSON.stringify(response.data.usuario.cedula));
                 localStorage.setItem('tipo',JSON.parse(JSON.stringify(response.data.usuario.tipo)));
-
+                localStorage.setItem('usuario', JSON.stringify(response.data.usuario));
                 history('/');
             }
         } catch (error) {

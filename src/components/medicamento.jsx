@@ -64,7 +64,7 @@ const Medicamento = ({ onCloseModal }) => { // Recibe una función para cerrar e
 
         const fechaActual = moment().format('YYYY-MM-DD');
 
-        const aplicaciones_medicamento = horarios.map((horaStr, index) => ({
+        const horarios = horarios.map((horaStr, index) => ({
             numero: index + 1,
             fecha: fechaActual,
             hora: `${horaStr}:00`, // Formato HH:mm:ss
@@ -75,7 +75,7 @@ const Medicamento = ({ onCloseModal }) => { // Recibe una función para cerrar e
             paciente: parseInt(cedula),
             nombre: datos.nombre, // Asegúrate de que el nombre del input sea 'nombre'
             dosis: datos.dosis,
-            aplicaciones_medicamento // Array anidado
+            horarios // Array anidado
         };
 
         console.log("Datos enviados (Agregar Medicamento):", JSON.stringify(datosAEnviar, null, 2));
@@ -185,10 +185,10 @@ const Medicamento = ({ onCloseModal }) => { // Recibe una función para cerrar e
 const CambiarMedicamento = ({ medicamento, actualizar, onCloseModal }) => {
     const { cedula } = useParams();
     const [datos, setDatos] = useState(medicamento);
-    // Mapea las aplicaciones_medicamento existentes a solo las horas en formato HH:mm
+    // Mapea las horarios existentes a solo las horas en formato HH:mm
     const [horarios, setHorarios] = useState(
-        medicamento.aplicaciones_medicamento
-            ? medicamento.aplicaciones_medicamento.map((app) => moment(app.hora, 'HH:mm:ss').format('HH:mm'))
+        medicamento.horarios
+            ? medicamento.horarios.map((app) => moment(app.hora, 'HH:mm:ss').format('HH:mm'))
             : []
     );
     const [errorMensaje, setErrorMensaje] = useState("");
@@ -217,7 +217,7 @@ const CambiarMedicamento = ({ medicamento, actualizar, onCloseModal }) => {
 
     const handleEliminarHora = async (itemToRemove) => {
         // Encuentra la aplicación_medicamento original si existe para intentar eliminarla por ID
-        const appToDelete = medicamento.aplicaciones_medicamento.find(app => moment(app.hora, 'HH:mm:ss').format('HH:mm') === itemToRemove);
+        const appToDelete = medicamento.horarios.find(app => moment(app.hora, 'HH:mm:ss').format('HH:mm') === itemToRemove);
 
         if (appToDelete && appToDelete.id) {
             try {
@@ -264,12 +264,12 @@ const CambiarMedicamento = ({ medicamento, actualizar, onCloseModal }) => {
             envio = { ...envio, dosis: datos.dosis };
         }
 
-        // 2. Manejar cambios en las aplicaciones_medicamento (horarios)
+        // 2. Manejar cambios en las horarios (horarios)
         const fechaActual = moment().format('YYYY-MM-DD');
 
         // Horarios que ya estaban y siguen estando (para no enviarlos)
-        const horariosOriginalesFormateados = medicamento.aplicaciones_medicamento
-            ? medicamento.aplicaciones_medicamento.map(app => moment(app.hora, 'HH:mm:ss').format('HH:mm'))
+        const horariosOriginalesFormateados = medicamento.horarios
+            ? medicamento.horarios.map(app => moment(app.hora, 'HH:mm:ss').format('HH:mm'))
             : [];
 
         // Horarios nuevos que deben ser creados (no estaban antes)
@@ -281,8 +281,8 @@ const CambiarMedicamento = ({ medicamento, actualizar, onCloseModal }) => {
         if (aplicacionesParaCrear.length > 0) {
             envio = {
                 ...envio,
-                aplicaciones_medicamento: aplicacionesParaCrear.map((horaStr, index) => ({
-                    numero: medicamento.aplicaciones_medicamento.length + index + 1, // Asigna un nuevo número
+                horarios: aplicacionesParaCrear.map((horaStr, index) => ({
+                    numero: medicamento.horarios.length + index + 1, // Asigna un nuevo número
                     fecha: fechaActual,
                     hora: `${horaStr}:00`,
                     tomado: false

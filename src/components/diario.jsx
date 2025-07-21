@@ -36,19 +36,7 @@ const PData = ({ fecha, hora, glucosa, insulina }) => {
 };
 
 // Tabla de seguimiento + exportación + gráfico
-const Seguimiento = ({ actualizar }) => {
-  const [datos, setDatos] = useState([]);
-  const { cedula } = useParams();
-
-  const obtenerDatos = async () => {
-    const response = await ObtenerDiario(cedula);
-    setDatos(response || []);
-  };
-
-  useEffect(() => {
-    obtenerDatos();
-  }, [actualizar]);
-
+const Seguimiento = ({ datos }) => {
   const exportarDatos = () => {
     const dataExportada = datos.map((item) => ({
       Fecha: moment(item.fecha).format("DD/MM/YYYY"),
@@ -109,16 +97,15 @@ const Diario = () => {
 
   const [paciente, setPaciente] = useState(null);
   const [datos, setDatos] = useState({ glucosa: "", insulina: "" });
-  const [actualizar, setActualizar] = useState({});
+  const [datosDiario, setDatosDiario] = useState([]);
 
   const obtenerPaciente = async () => {
     try {
       const res = await ObtenerPaciente(cedula);
-      console.log(res);
       if (!res) {
         navigate("/pacientes");
       } else {
-          setPaciente(res);
+        setPaciente(res);
       }
     } catch (error) {
       console.error("Error al obtener paciente:", error);
@@ -126,8 +113,14 @@ const Diario = () => {
     }
   };
 
+  const obtenerDatos = async () => {
+    const response = await ObtenerDiario(cedula);
+    setDatosDiario(response || []);
+  };
+
   useEffect(() => {
     obtenerPaciente();
+    obtenerDatos();
   }, []);
 
   const handleOnChange = (e) => {
@@ -152,8 +145,8 @@ const Diario = () => {
     const payload = { glucosa, insulina };
 
     try {
-      const { data } = await GuardarDiario(cedula, payload);
-      setActualizar(data);
+      await GuardarDiario(cedula, payload);
+      await obtenerDatos(); // <- Se actualiza al guardar
       setDatos({ glucosa: "", insulina: "" });
     } catch (error) {
       console.error("Error al guardar el diario:", error);
@@ -213,7 +206,7 @@ const Diario = () => {
         </Card.Body>
       </Card>
 
-      <Seguimiento actualizar={actualizar} />
+      <Seguimiento datos={datosDiario} />
     </>
   );
 };

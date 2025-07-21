@@ -37,12 +37,15 @@ const P_reg = () => {
          await CambiarTipo('unico');
         localStorage.setItem('tipo', 'unico');
 
-        await RegistrarPaciente({
-            ...datos,
+
+        const response = await RegistrarPaciente({           
+             ...datos,
+             imagen: image,
             nombre: user.nombre_completo,
-            telefono: user.telefono,
-        });
-        history('/');
+            telefono: user.telefono,});
+            if (response ) {
+                history('/');
+            }
     }
     return(
         <Card className="mx-auto" style={{ maxWidth: '20rem'  }}>
